@@ -1,0 +1,64 @@
+`timescale 1ns / 1ps
+
+module seven_segment(
+    input clk,
+    input [7:0] value, // Value to display (alu_result)
+    output reg [3:0] an,
+    output reg [6:0] LED_out
+    );
+    
+    reg [19:0] refresh_counter = 0; // Refresh rate counter
+    reg [1:0] display_select = 0;  // Active display selector
+    reg [3:0] current_digit;       // Current digit to display
+    
+    reg [3:0] digits [3:0];        // Array to store decimal digits (thousands, hundreds, tens, units)
+
+    // Refresh rate: around 1 kHz for each display
+    always @(posedge clk) begin
+        refresh_counter <= refresh_counter + 1;
+        display_select <= refresh_counter[19:18];
+    end
+
+    // Binary to Decimal Conversion (8-bit value to 4 decimal digits)
+    always @(*) begin
+        // Calculate digits using modulus and division
+        digits[3] = (value / 1000) % 10; // Thousands place
+        digits[2] = (value / 100) % 10;  // Hundreds place
+        digits[1] = (value / 10) % 10;   // Tens place
+        digits[0] = value % 10;          // Units place
+    end
+
+    // Select the current digit to display
+    always @(*) begin
+        case (display_select)
+            2'b00: current_digit = digits[0]; // Units place
+            2'b01: current_digit = digits[1]; // Tens place
+            2'b10: current_digit = digits[2]; // Hundreds place
+            2'b11: current_digit = digits[3]; // Thousands place
+            default: current_digit = 4'hF;    // Blank for unused digits
+        endcase
+    end
+
+    // Enable signals for each display
+    always @(*) begin
+        an = 4'b1111;              // All displays off by default
+        an[display_select] = 0;    // Enable the current display
+    end
+
+    // 7-segment encoding (Decimal to 7-segment mapping)
+    always @(*) begin
+        case (current_digit)
+            4'h0: LED_out = 7'b0000001;
+            4'h1: LED_out = 7'b1001111;
+            4'h2: LED_out = 7'b0010010;
+            4'h3: LED_out = 7'b0000110;
+            4'h4: LED_out = 7'b1001100;
+            4'h5: LED_out = 7'b0100100;
+            4'h6: LED_out = 7'b0100000;
+            4'h7: LED_out = 7'b0001111;
+            4'h8: LED_out = 7'b0000000;
+            4'h9: LED_out = 7'b0000100;
+            default: LED_out = 7'b1111111; // All segments off
+        endcase
+    end
+endmodule
