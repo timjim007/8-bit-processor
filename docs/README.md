@@ -1,4 +1,4 @@
-# Instruction Set Documentation for 8-bit Processor
+# 8-bit RISC Processor
 
 ## Overview
 This document provides an overview of the instruction set design for the 8-bit RISC processor. The instructions are grouped into two main categories:
