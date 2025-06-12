@@ -4,7 +4,7 @@
 
 This project implements an **8-bit RISC (Reduced Instruction Set Computer)** processor using **Verilog**, designed for deployment on the **Basys 3 FPGA board** using **Xilinx Vivado**.
 
-The processor features a Harvard architecture with a simplified instruction set, supporting basic arithmetic, logic, memory, and control flow operations. It includes a custom 5-stage instruction pipeline and is capable of running small assembly programs. The system demonstrates functionality through an interactive 7-segment display.
+The processor features a Harvard architecture with a simplified instruction set, supporting basic arithmetic, logic, memory, and control flow operations. It includes a custom 5-stage instruction pipeline and is capable of running small assembly programs. The system demonstrates functionality through a 7-segment display.
 
 ---
 ### Architecture Diagram
@@ -12,7 +12,9 @@ The processor features a Harvard architecture with a simplified instruction set,
 
 ---
 ### Demo
+
 A sample program counts from 0 to 255 and displays the value of any register selected via the on-board switches on the 7-segment display.
+
 ![Demo](IMG_5401.gif)
 ---
 
@@ -104,8 +106,9 @@ The processor uses a **5-stage pipeline** for instruction execution:
 ```graphql
   ├─ src/ # Verilog source files
   ├─ sim/ # Simulation testbenches
-  ├─ README.md # Project documentation
-  ├─ constraints.xdc # Basys 3 pin configuration
+  ├─ docs # Project documentation
+  ├─ project_files # Basys 3 constraints.xdc and mem files
+  ├─ test_files # program files for testing on board
 
 ```
 
