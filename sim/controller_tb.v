@@ -1,9 +1,6 @@
 `timescale 1ns / 1ps
 
-module controller_tb(
-    );
-    
-    reg [3:0] opcode_i;
+  reg [3:0] opcode_i;
     reg flag_carry;
     reg flag_zero;
     wire [2:0] alu_op_o;
@@ -71,3 +68,5 @@ module controller_tb(
 
         $stop;
     end
+endmodule
+

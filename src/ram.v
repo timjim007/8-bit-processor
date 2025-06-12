@@ -10,6 +10,10 @@ module ram #(parameter DATA_WIDTH = 8)(
     
     reg [DATA_WIDTH -1: 0] mem [0:255];
     
+//     initial begin
+//        // Load RAM 
+//        $readmemb("ram_data.mem", mem);
+//    end
     
     always @(posedge clk)
     begin

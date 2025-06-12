@@ -7,7 +7,7 @@
 `define ALU_OR 4'b1110
 `define ALU_NOP 4'b1111
 
-`define ALU_MOD_NOP 3'b111
+`define ALU_MOD_NOP 4'b1111
 
 `define OP_ST 4'b0000
 `define OP_LDI 4'b0001
@@ -16,4 +16,5 @@
 `define OP_JMP 4'b0100
 `define OP_JNE 4'b0101
 `define OP_JC 4'b0110
+
 

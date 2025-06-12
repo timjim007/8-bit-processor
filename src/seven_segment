@@ -7,42 +7,44 @@ module seven_segment(
     output reg [6:0] LED_out
     );
     
-    reg [19:0] refresh_counter = 0; // Refresh rate counter
-    reg [1:0] display_select = 0;  // Active display selector
+    reg [18:0] refresh_counter = 0; // Refresh rate counter
+    reg [1:0] LED_select = 0;  // Active display selector
     reg [3:0] current_digit;       // Current digit to display
     
-    reg [3:0] digits [3:0];        // Array to store decimal digits (thousands, hundreds, tens, units)
-
-    // Refresh rate: around 1 kHz for each display
+    
+   // Refresh rate: 240 Hz for each digit (60 Hz full display cycle)
     always @(posedge clk) begin
-        refresh_counter <= refresh_counter + 1;
-        display_select <= refresh_counter[19:18];
+        if (refresh_counter >= 416667) begin
+            refresh_counter <= 0;
+            LED_select <= LED_select + 1;
+        end else begin
+            refresh_counter <= refresh_counter + 1;
+        end
     end
 
-    // Binary to Decimal Conversion (8-bit value to 4 decimal digits)
+    
+    
+   // Anode activation and digit selection
     always @(*) begin
-        // Calculate digits using modulus and division
-        digits[3] = (value / 1000) % 10; // Thousands place
-        digits[2] = (value / 100) % 10;  // Hundreds place
-        digits[1] = (value / 10) % 10;   // Tens place
-        digits[0] = value % 10;          // Units place
-    end
+        case (LED_select)
+            2'b00: begin
+                an = 4'b1110;  // Rightmost digit (ones)
+                current_digit = (value % 10);
+            end
+            2'b01: begin
+                an = 4'b1101;  // Tens digit
+                current_digit = (value % 100) / 10;
+            end
+            2'b10: begin
+                an = 4'b1011;  // Hundreds digit
+                current_digit = (value / 100);
+            end
+            2'b11: begin
+                an = 4'b0111;  // Leftmost digit (unused or blank)
+                current_digit = 4'b0000;
+            end
+    endcase 
 
-    // Select the current digit to display
-    always @(*) begin
-        case (display_select)
-            2'b00: current_digit = digits[0]; // Units place
-            2'b01: current_digit = digits[1]; // Tens place
-            2'b10: current_digit = digits[2]; // Hundreds place
-            2'b11: current_digit = digits[3]; // Thousands place
-            default: current_digit = 4'hF;    // Blank for unused digits
-        endcase
-    end
-
-    // Enable signals for each display
-    always @(*) begin
-        an = 4'b1111;              // All displays off by default
-        an[display_select] = 0;    // Enable the current display
     end
 
     // 7-segment encoding (Decimal to 7-segment mapping)

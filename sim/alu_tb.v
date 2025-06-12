@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module alu_tb(
+ module alu_tb(
 
     );
     
@@ -76,3 +76,6 @@ module alu_tb(
         // Finish simulation
         #10 $stop;
     end
+
+    
+endmodule
